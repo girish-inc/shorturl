@@ -3,7 +3,7 @@ import HomePage from './pages/Home';
 
 function App() {
   return (
-    <div className="page-wrapper" style={{ paddingLeft: '31.5rem' }}>
+    <div className="page-wrapper" style={{ paddingLeft: '25.5rem' }}>
       <HomePage />
     </div>
   );
