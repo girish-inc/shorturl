@@ -29,3 +29,20 @@ export async function getLinks() {
   return handleResponse(response);
 }
 
+export async function deleteLink(code) {
+  const response = await fetch(`${API_BASE}/links/${code}`, {
+    method: 'DELETE'
+  });
+  return handleResponse(response);
+}
+
+export async function getLinkStats(code) {
+  const response = await fetch(`${API_BASE}/links/${code}/stats`);
+  return handleResponse(response);
+}
+
+export async function getHealthCheck() {
+  const response = await fetch(`${API_BASE}/health`);
+  return handleResponse(response);
+}
+

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import LinkForm from '../components/LinkForm';
 import LinksTable from '../components/LinksTable';
-import { createLink, getLinks } from '../services/linkService';
+import { createLink, getLinks, deleteLink } from '../services/linkService';
 import { getShortLinkBase } from '../utils/url';
 
 function HomePage() {
@@ -40,8 +40,19 @@ function HomePage() {
       setCustomCode('');
     } catch (err) {
       setError(err.message);
-    } finally {
+} finally {
       setLoading(false);
+    }
+  }
+
+  async function handleDelete(code) {
+    
+
+    try {
+      await deleteLink(code);
+      setLinks((prevLinks) => prevLinks.filter(link => link.code !== code));
+    } catch (err) {
+      alert('Failed to delete link: ' + err.message);
     }
   }
 
@@ -70,6 +81,7 @@ function HomePage() {
               links={links}
               fetchingLinks={fetchingLinks}
               shortLinkBase={shortLinkBase}
+              onDelete={handleDelete}
             />
           </div>
         </div>

@@ -4,7 +4,9 @@ import {
   createLinkRecord,
   findLinkByCode,
   getAllLinks,
-  incrementLinkClick
+  incrementLinkClick,
+  deleteLinkByCode,
+  getLinkStats
 } from '../models/linkModel.js';
 
 function normalizePayload(req) {
@@ -86,6 +88,48 @@ export async function handleRedirect(req, res) {
   } catch (error) {
     console.error('Redirect error:', error);
     return res.status(500).send('Server error');
+  }
+}
+
+export async function deleteLink(req, res) {
+  const { code } = req.params;
+
+  if (!validateCode(code)) {
+    return res.status(404).json({ error: 'Invalid code format' });
+  }
+
+  try {
+    const deletedLink = await deleteLinkByCode(code);
+
+    if (!deletedLink) {
+      return res.status(404).json({ error: 'Link not found' });
+    }
+
+    return res.json({ message: 'Link deleted successfully', link: deletedLink });
+  } catch (error) {
+    console.error('Delete error:', error);
+    return res.status(500).json({ error: 'Failed to delete link' });
+  }
+}
+
+export async function getStats(req, res) {
+  const { code } = req.params;
+
+  if (!validateCode(code)) {
+    return res.status(404).json({ error: 'Invalid code format' });
+  }
+
+  try {
+    const link = await getLinkStats(code);
+
+    if (!link) {
+      return res.status(404).json({ error: 'Link not found' });
+    }
+
+    return res.json(link);
+  } catch (error) {
+    console.error('Stats error:', error);
+    return res.status(500).json({ error: 'Failed to fetch stats' });
   }
 }
 

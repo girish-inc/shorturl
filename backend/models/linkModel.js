@@ -30,3 +30,13 @@ export async function incrementLinkClick(code) {
   );
 }
 
+export async function deleteLinkByCode(code) {
+  const result = await pool.query('DELETE FROM links WHERE code = $1 RETURNING *', [code]);
+  return result.rows[0] || null;
+}
+
+export async function getLinkStats(code) {
+  const result = await pool.query('SELECT * FROM links WHERE code = $1', [code]);
+  return result.rows[0] || null;
+}
+
